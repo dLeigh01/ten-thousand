@@ -1,0 +1,2 @@
+class Gamelogic:
+    pass
