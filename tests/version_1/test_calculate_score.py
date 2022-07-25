@@ -1,7 +1,7 @@
 import pytest
 from ten_thousand.game_logic import GameLogic
 
-@pytest.mark.skip
+# @pytest.mark.skip
 @pytest.mark.parametrize(
     "test_input,expected",
     [
