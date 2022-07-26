@@ -14,10 +14,6 @@ class GameLogic:
             if sort[0][1] == 2:
                 return 1500
 
-        if len(sort) == 2:
-            if sort[0][1] == 3 & sort[1][1] == 3:
-                return 1200
-
         for item in sort:
             if item[0] == 1:
                 if item[1] < 3:
@@ -44,6 +40,13 @@ class GameLogic:
             i += 1
         return tuple(result)
 
+def play_game():
+    print("Welcome to Ten Thousand")
+    print("(y)es to play or (n)o to decline")
+    choice = input("> ")
+    if choice == "n":
+        print("OK. Maybe another time")
+        return
+
 if __name__ == '__main__':
-    game = GameLogic()
-    game.calculate_score(game.roll_dice(6))
+    play_game()
