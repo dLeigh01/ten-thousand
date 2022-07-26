@@ -83,7 +83,7 @@ class TestLogic:
 
     @staticmethod
     def roll_dice(num):
-        result = (4, 4, 5, 2, 3, 1)
+        result = (4, 2, 6, 4, 6, 5)
         return result
 
 # change tuple to list of string values
@@ -92,6 +92,27 @@ def tuple_to_list(tup):
     for item in tup:
         li.append(str(item))
     return li
+
+# change string of numbers to tuple of integers
+def string_to_tuple(text):
+    li = list(text)
+    int_li = []
+    for item in li:
+        int_li.append(int(item))
+
+    return tuple(int_li)
+
+# quit game and print score
+def quit_game(score):
+    print(f"Thanks for playing. You earned {score} points")
+    return
+
+# roll dice and ask for keep or quit
+def roll_to_choice(logic, dice):
+    roll = tuple_to_list(logic.roll_dice(dice))
+    print(f"*** {' '.join(roll)} ***")
+    print("Enter dice to keep, or (q)uit:")
+    return input("> ")
 
 ################################################################################
 ################################## RUN GAME ####################################
@@ -107,22 +128,45 @@ def play_game(logic):
         return
     elif choice == "y":
         count = 1
+        total_score = 0
 
         # only run game for 20 rounds
         while count <= 20:
+            dice = 6
+            round_score = 0
             print(f"Starting round {count}")
-            print("Rolling 6 dice...")
-            roll = tuple_to_list(logic.roll_dice(6))
-            print(f"*** {' '.join(roll)} ***")
-            print("Enter dice to keep, or (q)uit:")
-            choice = input("> ")
+            print(f"Rolling {dice} dice...")
+            choice = roll_to_choice(logic, dice)
 
             if choice == "q":
-                print("Thanks for playing. You earned 0 points")
+                quit_game(total_score)
                 return
+
+            while True:
+                this_roll = logic.calculate_score(string_to_tuple(choice))
+                round_score += this_roll
+                dice -= len(list(choice))
+                print(f"You have {round_score} unbanked points and {dice} dice remaining")
+                print("(r)oll again, (b)ank your points or (q)uit:")
+                choice = input("> ")
+                if choice == "q":
+                    quit_game(total_score + round_score)
+                    return
+                if choice == "r":
+                    choice = roll_to_choice(logic, dice)
+                    if choice == "q":
+                        quit_game(total_score + round_score)
+                        return
+                    continue
+                if choice == "b":
+                    total_score += round_score
+                    print(f"You banked {round_score} points in round {count}")
+                    print(f"Total score is {total_score} points")
+                    break
+
             # increase count after each round
             count += 1
 
 
 if __name__ == '__main__':
-    play_game(TestLogic())
+    play_game(GameLogic())
