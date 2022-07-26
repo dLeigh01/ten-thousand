@@ -31,7 +31,7 @@ class GameLogic:
                     score += (5 * 100) + ((5 * 100) * (item[1] - 3))
             elif item[1] >= 3:
                 score += (item[0] * 100) + ((item[0] * 100) * (item[1] - 3))
-                
+
         return score
 
     @staticmethod
