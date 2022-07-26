@@ -1,6 +1,6 @@
 # Lab - Class 06
 
-## Project: Pythonic Garage Band
+## Project: Ten Thousand
 
 ### Author: Dana Huffman
 
