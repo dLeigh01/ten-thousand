@@ -143,21 +143,30 @@ def play_game(logic):
                 return
 
             while True:
+                # calculate score
                 this_roll = logic.calculate_score(string_to_tuple(choice))
                 round_score += this_roll
                 dice -= len(list(choice))
                 print(f"You have {round_score} unbanked points and {dice} dice remaining")
                 print("(r)oll again, (b)ank your points or (q)uit:")
                 choice = input("> ")
+
+                # quit game
                 if choice == "q":
                     quit_game(total_score + round_score)
                     return
+
+                # roll again
                 if choice == "r":
                     choice = roll_to_choice(logic, dice)
+
+                    # quit game
                     if choice == "q":
                         quit_game(total_score + round_score)
                         return
                     continue
+
+                # bank total, start next round
                 if choice == "b":
                     total_score += round_score
                     print(f"You banked {round_score} points in round {count}")
