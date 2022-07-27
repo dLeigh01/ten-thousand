@@ -62,7 +62,6 @@ def rounds(Logic, round_count, total_score):
 
 def round_start(Logic, round_count, dice, total_score, round_score):
     print(f"Starting round {round_count}")
-    print(f"Rolling {dice} dice...")
     zilch = roll_dice(Logic, dice, total_score, round_score, round_count)
     if zilch == 0:
         return zilch
@@ -105,6 +104,7 @@ def format_dice_choice(text):
 
 
 def roll_dice(Logic, dice, total_score, round_score, round_count):
+    print(f"Rolling {dice} dice...")
     roll = format_roll(Logic.roll_dice(dice))
     print(f"*** {roll} ***")
     zilch = zilch_check(Logic, roll, total_score, round_score, round_count)
@@ -139,4 +139,4 @@ def run_game(Logic):
         accept_game(Logic)
 
 if __name__ == '__main__':
-    run_game(GameLogic)
+    run_game(TestLogic)
