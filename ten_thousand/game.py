@@ -6,9 +6,11 @@ def welcome_message():
     print("(y)es to play or (n)o to decline")
     return input("> ")
 
+
 def decline_game():
     print("OK. Maybe another time")
     return
+
 
 def accept_game(logic):
     round_count = 1
@@ -16,56 +18,69 @@ def accept_game(logic):
     total_score = 0
 
     while round_count <= max_rounds:
-        # TODO rounds()
-        dice = 6
-        round_score = 0
-        print(f"Starting round {round_count}")
-        print(f"Rolling {dice} dice...")
-        choice = roll_dice(logic, dice)
+        round_result = rounds(logic, round_count, total_score)
 
-        if choice == "q":
+        if round_result == 'q':
             quit_game(total_score)
             return
 
-        while True:
-            # calculate score
-            held_dice = string_to_tuple(choice)
-            this_roll = logic.calculate_score(held_dice)
-            round_score += this_roll
-            dice -= len(held_dice)
-            print(f"You have {round_score} unbanked points and {dice} dice remaining")
-            print("(r)oll again, (b)ank your points or (q)uit:")
-            choice = input("> ")
-
-            # quit game
-            if choice == "q":
-                quit_game(total_score)
-                return
-
-            # roll again
-            if choice == "r":
-                choice = roll_dice(logic, dice)
-
-                # quit game
-                if choice == "q":
-                    quit_game(total_score)
-                    return
-                continue
-
-            # bank total, start next round
-            if choice == "b":
-                total_score = bank_points(total_score, round_score, round_count)
-                break
-
+        total_score = round_result
         round_count += 1
     return
 
-def rounds():
-    pass
+
+def rounds(logic, round_count, total_score):
+    dice = 6
+    round_score = 0
+    choice = round_start(logic, round_count, dice)
+
+    # quit game
+    if choice == "q":
+        return choice
+
+    while True:
+        held_dice = format_dice_choice(choice)
+        round_score += calculate_score(logic, held_dice)
+        dice -= len(held_dice)
+        choice = roll_or_bank(round_score, dice)
+
+        # quit game
+        if choice == "q":
+            return choice
+
+        # roll again
+        if choice == "r":
+            roll_dice(logic, dice)
+            continue
+
+        # bank total, start next round
+        if choice == "b":
+            return bank_points(total_score, round_score, round_count)
+
+
+def round_start(logic, round_count, dice):
+    print(f"Starting round {round_count}")
+    print(f"Rolling {dice} dice...")
+    roll_dice(logic, dice)
+    print("Enter dice to keep, or (q)uit:")
+    return input("> ")
+
+
+def roll_or_bank(round_score, dice):
+    print(f"You have {round_score} unbanked points and {dice} dice remaining")
+    print("(r)oll again, (b)ank your points or (q)uit:")
+    return input("> ")
+
+
+def calculate_score(logic, held_dice):
+    this_roll = logic.calculate_score(held_dice)
+    return this_roll
+
 
 def quit_game(score):
     print(f"Thanks for playing. You earned {score} points")
     return
+
 
 def bank_points(total_score, round_score, round_count):
     total_score += round_score
@@ -73,25 +88,22 @@ def bank_points(total_score, round_score, round_count):
     print(f"Total score is {total_score} points")
     return total_score
 
-################################################################################
-############################ HELPER FUNCTIONS ##################################
-################################################################################
 
 # change tuple from roll_dice to list of string values
 def format_roll(tup):
     text = [str(item) for item in tup]
     return ' '.join(text)
 
+
 # change string of numbers to tuple of integers
-def string_to_tuple(text):
+def format_dice_choice(text):
     return tuple([int(num) for num in text if num.isdigit()])
 
-# roll dice and ask for keep or quit
+
 def roll_dice(logic, dice):
     roll = format_roll(logic.roll_dice(dice))
     print(f"*** {roll} ***")
-    print("Enter dice to keep, or (q)uit:")
-    return input("> ")
+    return
 
 ################################################################################
 ################################## RUN GAME ####################################
