@@ -51,6 +51,13 @@ class GameLogic:
         scorers = [die for die in dice if die == 1 or die == 5]
         return tuple(scorers)
 
+    @staticmethod
+    def validate_keepers(roll, keepers):
+        validation = GameLogic.get_scorers(roll)
+        if tuple(reversed(sorted(validation))) == keepers:
+            return True
+        return False
+
 
 bank_first_for_two_rounds_rolls = [(3, 2, 5, 4, 3, 3), (5, 2, 3, 2, 1, 4), (6, 6, 5, 4, 2, 1)]
 rolls = bank_first_for_two_rounds_rolls
