@@ -12,13 +12,13 @@ def decline_game():
     return
 
 
-def accept_game(logic):
+def accept_game(Logic):
     round_count = 1
     max_rounds = 20
     total_score = 0
 
     while round_count <= max_rounds:
-        round_result = rounds(logic, round_count, total_score)
+        round_result = rounds(Logic, round_count, total_score)
 
         if round_result == 'q':
             quit_game(total_score)
@@ -29,10 +29,10 @@ def accept_game(logic):
     return
 
 
-def rounds(logic, round_count, total_score):
+def rounds(Logic, round_count, total_score):
     dice = 6
     round_score = 0
-    choice = round_start(logic, round_count, dice)
+    choice = round_start(Logic, round_count, dice, total_score, round_score)
 
     # quit game
     if choice == "q":
@@ -40,7 +40,7 @@ def rounds(logic, round_count, total_score):
 
     while True:
         held_dice = format_dice_choice(choice)
-        round_score += calculate_score(logic, held_dice)
+        round_score += calculate_score(Logic, held_dice)
         dice -= len(held_dice)
         choice = roll_or_bank(round_score, dice)
 
@@ -50,7 +50,9 @@ def rounds(logic, round_count, total_score):
 
         # roll again
         if choice == "r":
-            roll_dice(logic, dice)
+            zilch = roll_dice(Logic, dice, total_score, round_score, round_count)
+            if zilch == 0:
+                return zilch
             continue
 
         # bank total, start next round
@@ -58,10 +60,12 @@ def rounds(logic, round_count, total_score):
             return bank_points(total_score, round_score, round_count)
 
 
-def round_start(logic, round_count, dice):
+def round_start(Logic, round_count, dice, total_score, round_score):
     print(f"Starting round {round_count}")
     print(f"Rolling {dice} dice...")
-    roll_dice(logic, dice)
+    zilch = roll_dice(Logic, dice, total_score, round_score, round_count)
+    if zilch == 0:
+        return zilch
     print("Enter dice to keep, or (q)uit:")
     return input("> ")
 
@@ -72,8 +76,8 @@ def roll_or_bank(round_score, dice):
     return input("> ")
 
 
-def calculate_score(logic, held_dice):
-    this_roll = logic.calculate_score(held_dice)
+def calculate_score(Logic, held_dice):
+    this_roll = Logic.calculate_score(held_dice)
     return this_roll
 
 
@@ -100,25 +104,39 @@ def format_dice_choice(text):
     return tuple([int(num) for num in text if num.isdigit()])
 
 
-def roll_dice(logic, dice):
-    roll = format_roll(logic.roll_dice(dice))
+def roll_dice(Logic, dice, total_score, round_score, round_count):
+    roll = format_roll(Logic.roll_dice(dice))
     print(f"*** {roll} ***")
+    zilch = zilch_check(Logic, roll, total_score, round_score, round_count)
+    if zilch == 0:
+        return zilch
     return
+
+def zilch_check(Logic, roll, total_score, round_score, round_count):
+    score = calculate_score(Logic, format_dice_choice(roll))
+    if score == 0:
+        return zilcher(total_score, round_count)
+    return
+
+def zilcher(total_score, round_count):
+    print("****************************************")
+    print("**        Zilch!!! Round over         **")
+    print("****************************************")
+    bank_points(total_score, 0, round_count)
+    return 0
+
 
 ################################################################################
 ################################## RUN GAME ####################################
 ################################################################################
 
-def run_game(logic):
+def run_game(Logic):
     choice = welcome_message()
 
     if choice == "n":
         decline_game()
     elif choice == "y":
-        accept_game(logic)
-
+        accept_game(Logic)
 
 if __name__ == '__main__':
-    run_game(TestLogic)
-
-    #TODO change logic to Logic
+    run_game(GameLogic)

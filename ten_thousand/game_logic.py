@@ -58,9 +58,16 @@ class GameLogic:
             return True
         return False
 
-
+# rolls for each sim
 bank_first_for_two_rounds_rolls = [(3, 2, 5, 4, 3, 3), (5, 2, 3, 2, 1, 4), (6, 6, 5, 4, 2, 1)]
-rolls = bank_first_for_two_rounds_rolls
+bank_one_roll_then_quit_rolls = [(4, 2, 6, 4, 6, 5), (6, 4, 5, 2, 3, 1)]
+one_and_done_rolls = [(4, 4, 5, 2, 3, 1)]
+cheat_and_fix_rolls = [(5, 2, 3, 5, 4, 2), (5, 2, 3, 5, 4, 2)]
+hot_dice_rolls = [(2, 3, 1, 3, 1, 2), (4, 1, 4, 4, 3, 4), (3, 2, 3, 2, 1, 4)]
+repeat_roller_rolls = [(2, 3, 1, 3, 4, 2), (4, 2, 4, 4, 6), (3, 2, 3, 2, 1, 4)]
+zilcher_rolls = [(1, 2, 5, 1, 2, 1), (4, 4), (1, 1, 2, 5, 1, 6)]
+
+rolls = zilcher_rolls
 # changeable rolls for testing purposes
 class TestLogic(GameLogic):
     @staticmethod
