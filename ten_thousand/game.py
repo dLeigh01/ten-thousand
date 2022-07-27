@@ -42,6 +42,8 @@ def rounds(Logic, round_count, total_score):
         held_dice = format_dice_choice(choice)
         round_score += calculate_score(Logic, held_dice)
         dice -= len(held_dice)
+        if dice == 0:
+            dice = 6
         choice = roll_or_bank(round_score, dice)
 
         # quit game
