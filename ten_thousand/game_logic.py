@@ -46,9 +46,20 @@ class GameLogic:
             i += 1
         return tuple(result)
 
+    @staticmethod
+    def get_scorers(dice):
+        scorers = [die for die in dice if die == 1 or die == 5]
+        return tuple(scorers)
+
+
+bank_first_for_two_rounds_rolls = [(3, 2, 5, 4, 3, 3), (5, 2, 3, 2, 1, 4), (6, 6, 5, 4, 2, 1)]
+rolls = bank_first_for_two_rounds_rolls
 # changeable rolls for testing purposes
 class TestLogic(GameLogic):
     @staticmethod
     def roll_dice(num):
-        result = (4, 2, 6, 4, 6, 5)
-        return result
+        if len(rolls):
+            result = rolls.pop(0)
+            return result
+
+        return GameLogic.roll_dice(num)

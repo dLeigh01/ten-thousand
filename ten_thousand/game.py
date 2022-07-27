@@ -119,4 +119,6 @@ def run_game(logic):
 
 
 if __name__ == '__main__':
-    run_game(GameLogic())
+    run_game(TestLogic)
+
+    #TODO change logic to Logic
