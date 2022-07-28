@@ -67,7 +67,7 @@ hot_dice_rolls = [(2, 3, 1, 3, 1, 2), (4, 1, 4, 4, 3, 4), (3, 2, 3, 2, 1, 4)]
 repeat_roller_rolls = [(2, 3, 1, 3, 4, 2), (4, 2, 4, 4, 6), (3, 2, 3, 2, 1, 4)]
 zilcher_rolls = [(1, 2, 5, 1, 2, 1), (4, 4), (1, 1, 2, 5, 1, 6)]
 
-rolls = hot_dice_rolls
+rolls = zilcher_rolls
 # changeable rolls for testing purposes
 class TestLogic(GameLogic):
     @staticmethod
