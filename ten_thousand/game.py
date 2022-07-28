@@ -36,12 +36,21 @@ def rounds(Logic, round_count, total_score):
 
     while True:
         roll = roll_dice(Logic, dice)
-        if zilcher(Logic, roll, total_score, round_count) == 0:
+        # check if the roll scored
+        if zilcher(Logic, roll) == 0:
+            bank_points(total_score, 0, round_count)
             return 0
-        choice = keep_or_quit()
-        if choice == "q":
-            return -1
-        held_dice = format_held_dice(choice)
+        while True:
+            choice = keep_or_quit()
+            # quit game
+            if choice == "q":
+                return -1
+            held_dice = format_dice(choice)
+            if Logic.validate_keepers(format_dice(roll), held_dice) is False: #TODO ADD THIS WHOLE SECTION AND 44-49 TO A FUNCTION
+                cheater(roll)
+                continue
+            break
+
         round_score += Logic.calculate_score(held_dice)
         dice -= len(held_dice)
         if dice == 0:
@@ -87,7 +96,7 @@ def format_roll(tup):
 
 
 # change string of numbers to tuple of integers
-def format_held_dice(text):
+def format_dice(text):
     return tuple([int(num) for num in text if num.isdigit()])
 
 
@@ -98,14 +107,18 @@ def roll_dice(Logic, dice):
     return roll
 
 
-def zilcher(Logic, roll, total_score, round_count):
-    if Logic.calculate_score(format_held_dice(roll)) == 0:
+def zilcher(Logic, roll):
+    if Logic.calculate_score(format_dice(roll)) == 0:
         print("****************************************")
         print("**        Zilch!!! Round over         **")
         print("****************************************")
-        bank_points(total_score, 0, round_count)
         return 0
     return
+
+
+def cheater(roll):
+    print("Cheater!!! Or possibly made a typo...")
+    print(f"*** {roll} ***")
 
 
 ################################################################################
